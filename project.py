@@ -23,12 +23,12 @@ def main():
     panned = pan(*harmony)
     if harmony_canon in ['h','H']:      #only harmonize (without delay)
         harmony = overlay(*panned)
-        harmony.export("MAboi.wav", format="wav")   #output harmony
+        harmony.export("harmony.wav", format="wav")   #output harmony
 
     else:                               #implement delayed harmony 
         delayed = delay(panned[1])
         canon = overlay(delayed, panned[0])
-        canon.export("MAboi.wav", format="wav")    #output canon
+        canon.export("canon.wav", format="wav")    #output canon
         
 
 
