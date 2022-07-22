@@ -38,4 +38,5 @@ played in a different voice is an exact replication of the original melody. User
 - project.py - The implementation of the program
 - test_project.py - Testing that the program works correctly
 - canon.wav / harmony.wav - The output file
+- requirements.txt - All the packages you need to download in order to run the program.
   
