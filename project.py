@@ -1,19 +1,26 @@
 from pydub import AudioSegment
 import librosa
 import soundfile
+import os
+
+
 #choose whether to do simple harmony or canon
-#make the file input and output more user friendly
-#maybe let the user test different canon states and then decide which one to write to file
-#could take input on which harmony and at which beat the user would like the canon to start
 
 def main():
-    sound1 = AudioSegment.from_file("song.wav", format="wav")
-    #request input from user whether he wants harmony or canon
+    # User picks file
+    while True:
+        try:
+            sound1 = AudioSegment.from_file(input("choose .wav file: "), format="wav")
+            break
+        except (FileNotFoundError):
+            print("file not found")
+
+    # request input from user whether he wants harmony or canon
     while True:
         try:
             harmony_canon = input("harmony or canon? ")
             if harmony_canon not in ['h','H','c','C']:
-                raise ValueError    
+                raise ValueError
             break
         except ValueError:
             pass
@@ -23,19 +30,40 @@ def main():
     panned = pan(*harmony)
     if harmony_canon in ['h','H']:      #only harmonize (without delay)
         harmony = overlay(*panned)
-        harmony.export("harmony.wav", format="wav")   #output harmony
+        # Let user choose what name the file should be saved as
+        while True:
+            try:
+                harmony.export("audio files/harmony/" + input("save as: ") + ".wav", format="wav")   #output harmony
+                break
+            except (FileNotFoundError):
+                print("File name invalid")
+        os.remove("sound2.wav")
 
-    else:                               #implement delayed harmony 
+    else:                               #implement delayed harmony
         delayed = delay(panned[1])
         canon = overlay(delayed, panned[0])
-        canon.export("canon.wav", format="wav")    #output canon
-        
+        # Let user choose what name the file should be saved as
+        while True:
+            try:
+                canon.export("audio files/canon/" + input("save as: ") + ".wav", format="wav")   #output canon
+                break
+            except (FileNotFoundError):
+                print("File name invalid")
+        os.remove("sound2.wav")
+
+
+
+
+
+'''
+helper functions
+'''
 
 
 def harmonize(sound1):
-    #set sound2 1 octave down/up
+    #shift sound2 by how many semitones user wants
     y, sr = librosa.load("song.wav", sr=16000)
-    shifted = librosa.effects.pitch_shift(y, sr=sr, n_steps=-12)
+    shifted = librosa.effects.pitch_shift(y, sr=sr, n_steps=input("shift harmony by _ semitones: "))
     #need to turn shifted back to other format
     soundfile.write("sound2.wav", shifted, sr)
     sound2 = AudioSegment.from_file("sound2.wav", format="wav")
