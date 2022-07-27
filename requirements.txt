@@ -1,4 +1,5 @@
 pydub
 librosa
 soundfile
-ffmpeg
+ffmpeg/libav
+tkinter
